@@ -1,8 +1,8 @@
-var React = require('react');
-var Hello = React.createClass({
-    render: function() {
-        return (<h1>Hello</h1>);
-    }
-});
+var React = require('react'),
+    injectTapEventPlugin = require('react-tap-event-plugin'),
+    Main = require('./components/main.js');
 
-React.render(<Hello />, document.body);
+window.React = React;
+injectTapEventPlugin();
+
+React.render(<Main />, document.body);
