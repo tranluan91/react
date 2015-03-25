@@ -1,7 +1,14 @@
 var React = require('react'),
     injectTapEventPlugin = require('react-tap-event-plugin'),
     Toolbar = require('./components/toolbar'),
-    Main = require('./components/main.js');
+    Dashboard = require('./components/dashboard'),
+    Inbox = require('./components/inbox'),
+    Main = require('./components/main');
+
+var Router = require('react-router'),
+    DefaultRoute = Router.DefaultRoute,
+    Route = Router.Route,
+    RouteHandler = Router.RouteHandler;
 
 window.React = React;
 injectTapEventPlugin();
@@ -11,10 +18,21 @@ var Wrapper = React.createClass({
         return (
             <div id="wrapper">
                 <Toolbar />
-                <Main />
+                <RouteHandler />
             </div>
         );
     }
 });
 
-React.render(<Wrapper />, document.body);
+
+var routes = (
+    <Route name="index" path="/" handler={Wrapper}>
+        <Route name="dashboard" handler={Dashboard} />
+        <Route name="inbox" handler={Inbox} />
+        <DefaultRoute handler={Main} />
+    </Route>
+);
+
+Router.run(routes, function(Handler){
+    React.render(<Handler />, document.body);
+});

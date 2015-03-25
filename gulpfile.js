@@ -14,12 +14,21 @@ var jsxDir = './jsx',
             get watch() {
                 return this.src + '/**.less'
             }
+        },
+        compass: {
+            src: './sass',
+            dest: './css',
+            configFile: './sass/config.rb',
+            get watch() {
+                return [this.src + '/**.sass']
+            }
         }
     },
     gulp = require('gulp'),
     less = require('gulp-less'),
     browserify = require('browserify'),
     reactify = require('reactify'),
+    compass = require('gulp-compass'),
     source = require('vinyl-source-stream');
 
 gulp.task('jsx', function() {
@@ -37,9 +46,20 @@ gulp.task('less', function(){
         .pipe(gulp.dest(configs.less.dest));
 });
 
+gulp.task('compass', function() {
+    gulp.src(configs.compass.src + '/*.sass')
+        .pipe(compass({
+            config_file: configs.compass.configFile,
+            sass: configs.compass.src,
+            css: './css'
+        }))
+        .pipe(gulp.dest(configs.compass.dest));
+});
+
 gulp.task('watch', function() {
     gulp.watch(configs.jsx.watch, ['jsx']);
     gulp.watch(configs.less.watch, ['less']);
+    gulp.watch(configs.compass.watch, ['compass']);
 });
 
-gulp.task('default', ['jsx', 'less']);
+gulp.task('default', ['jsx', 'less', 'compass', 'watch']);
